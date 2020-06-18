@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>Tweesor</title>
+
+    </head>
+    <body>
+    <h1>新規種別登録</h1>
+     <form action="{% url 'tweesor:index' %}" method="POST" name="create_label_name">
+        <div class="field">
+            {{ label_name.label_tag }}
+            {{ label_name }}
+        </div>
+        <div class="field">
+            <button type="submit">送信</button>
+        </div>
+
+        {% csrf_token %}    
+    </form>
+
+    <form action="{% url 'tweesor:search_tweet' %}" method="POST" name="search_tweet">
+        <div class="field">
+        <input type="text" name="search" value="{{ request.GET.query }}" id="autocomplete-input" class="autocomplete">
+        <label for="autocomplete-input">検索ごく</label>
+        </div>
+        <div class="field">
+            <button type="submit">送信</button>
+        </div>
+
+        {% csrf_token %}
+    </form>
+
+
+        {% if tweets %}
+            <ul>    
+            {% for tweet in tweets %}
+                <li><p>{{ tweet.0 }}</p></li>
+                <form action="{% url 'tweesor:learn' tweet.1 %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="learn" value="学習させる"　id="learn">
+                    {{ labels }}
+
+                </form>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No polls are available.</p>
+        {% endif %} 
+        <script type="text/javascript" src="{% static 'tweesor/js/app.js' %}"></script>
+    </body>
+</html>

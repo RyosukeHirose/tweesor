@@ -1,0 +1,21 @@
+version: '3.7'  
+services:  
+  python: 
+    build:
+      context: .
+    volumes:
+        - ~/.ssh/id_rsa:/home/user/.ssh/id_rsa
+        - ./:/code/
+    container_name: tweesor_python
+    env_file:
+        - .env
+    ports:
+      - 9000:9000
+    tty: true
+    stdin_open: true
+
+
+
+   
+
+
