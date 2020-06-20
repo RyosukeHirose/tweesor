@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for label_list in label_lists %}
+<div>
+    <a href="{% url 'tweesor:learn_tweet' label_list.id%}">{{ label_list }}</a>
+</div>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for learn_tweet in learn_tweets %}
+<div>
+    <p>{{ learn_tweet.text }}</p>
+</div>
+{% endfor %}
+
+{% endblock %}

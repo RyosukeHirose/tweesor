@@ -1,52 +1,111 @@
-<!DOCTYPE html>
-{% load static %}
-<html>
-    <head>
-        <title>Tweesor</title>
 
-    </head>
-    <body>
-    <h1>新規種別登録</h1>
-     <form action="{% url 'tweesor:index' %}" method="POST" name="create_label_name">
-        <div class="field">
-            {{ label_name.label_tag }}
-            {{ label_name }}
-        </div>
-        <div class="field">
-            <button type="submit">送信</button>
-        </div>
+{% extends 'base.html' %}
+{% block content %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h2 class="m-0 text-dark">ツイートを取得</h2>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Starter Page</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
-        {% csrf_token %}    
-    </form>
-
-    <form action="{% url 'tweesor:search_tweet' %}" method="POST" name="search_tweet">
-        <div class="field">
-        <input type="text" name="search" value="{{ request.GET.query }}" id="autocomplete-input" class="autocomplete">
-        <label for="autocomplete-input">検索ごく</label>
-        </div>
-        <div class="field">
-            <button type="submit">送信</button>
-        </div>
-
-        {% csrf_token %}
-    </form>
-
-
-        {% if tweets %}
-            <ul>    
-            {% for tweet in tweets %}
-                <li><p>{{ tweet.0 }}</p></li>
-                <form action="{% url 'tweesor:learn' tweet.1 %}" method="post">
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card card-primary">
+              <div class="card-header">
+                <h5 class="card-title">Search Tweet</h5>
+              </div>
+                
+                <form role="form" action="{% url 'tweesor:search_tweet' %}" method="POST" name="search_tweet">
+                    <div class="card-body">
+                        <div class="field">
+                            <label for="autocomplete-input">検索</label><br>
+                            <input name="search" value="{{ request.GET.query }}" id="autocomplete-input" class="autocomplete col-12" placeholder="検索したい語句を入力してください">    
+                        </div>
+                    </div>
+                    <div class="field card-footer">
+                        <button class="btn btn-primary" type="submit">送信</button>
+                    </div>
                     {% csrf_token %}
-                    <input type="submit" name="learn" value="学習させる"　id="learn">
-                    {{ labels }}
-
                 </form>
+              
+            </div>
+          </div>
+          
+          <div class="col-lg-10">
+            <h2>ツイートを指定の種別に学習させる</h2>
+            {% if tweets %}
+            {% for tweet in tweets %}
+            <div class="card card-primary card-outline">
+              <div class="card-body">
+                    <p>{{ tweet.0 }}</p>
+              </div>
+              <form action="{% url 'tweesor:learn' tweet.1 %}" method="post">
+                {% csrf_token %}
+                <div class="field card-footer">
+                    {{ labels }} 
+                    <input class="btn btn-info" type="submit" name="learn" value="学習させる"　id="learn">            
+                </div>
+            </form>
+            </div><!-- /.card -->
             {% endfor %}
-            </ul>
-        {% else %}
-            <p>No polls are available.</p>
-        {% endif %} 
-        <script type="text/javascript" src="{% static 'tweesor/js/app.js' %}"></script>
-    </body>
-</html>
+            {% else %}
+                <p>ツイートを検索してください</p>
+            {% endif %}
+            
+          </div>
+          <!-- /.col-md-6 -->
+ 
+
+          </div>
+          <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <h1>新規種別登録</h1>
+    <form action="{% url 'tweesor:index' %}" method="POST" name="create_label_name">
+    <div class="field">
+        {{ create_label.label_tag }}
+        {{ create_label }}
+    </div>
+    <div class="field">
+        <button type="submit">送信</button>
+    </div>
+
+    {% csrf_token %}    
+</form>
+
+
+
+
+{% endblock %} -->

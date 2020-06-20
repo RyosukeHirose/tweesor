@@ -16,7 +16,11 @@ API_URL = "https://api.twitter.com/1.1/search/tweets.json?tweet_mode=extended"
 CLASS_LABEL = "__label__1"
 
 def tweet_get(searh_word):
+    """
+    ツイートを検索するメソッド
+    """
     try:
+        print("searh_word:{}".format(searh_word))
         KEYWORD = searh_word
         headers = {
             'Authorization': 'Bearer {}'.format(BA),
@@ -31,10 +35,11 @@ def tweet_get(searh_word):
             full_text = tweet['full_text']
             id = tweet['id']
             tweet_list.append((full_text, id))
+        return tweet_list
     except Exception as e:
         print(e)
 
-    return tweet_list
+    
 
 
 if __name__ == '__main__':
