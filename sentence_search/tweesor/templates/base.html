@@ -15,7 +15,7 @@
             <div class="nav-wrapper blue accent-4">
                 <div class="container">
                     <div class="container">
-                        <a href="{% url "tweesor:index" %}" class="brand-logo">Tweesor</a>
+                        <a href="{% url 'tweesor:index' %}" class="brand-logo">Tweesor</a>
                         <ul id="nav-mobile" class="right hide-on-med-and-down">
                             <li><a href="{% url 'tweesor:label_list' %}">学習種別リストへ</a></li>
                             <li><a href="badges.html">Components</a></li>
@@ -117,30 +117,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item has-treeview menu-open">
-            <a href="#" class="nav-link active">
+          <li class="nav-item has-treeview menu-open" id="learntweet_base">
+            <a href="#" class="nav-link accent-1" id="learntweet">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Starter Pages
+                Learn Tweet
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link active">
+                <a href="{% url 'tweesor:index' %}" class="nav-link" id="searchtweet">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Active Page</p>
+                  <p>ツイートを検索</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
+              {% comment %} <li class="nav-item">
+                <a href="{% url 'tweesor:label_list' %}" class="nav-link" id="label_list">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Inactive Page</p>
+                  <p>種別一覧</p>
                 </a>
-              </li>
+              </li> {% endcomment %}
             </ul>
           </li>
-          <li class="nav-item">
+          {% comment %} <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
@@ -148,15 +148,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
-          </li>
+          </li> {% endcomment %}
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
   </aside>
+
+<div class="content-wrapper">
 {% block content %}
 {% endblock %}
+</div>
 
 
   <!-- Control Sidebar -->
@@ -190,10 +193,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 <script src="{% static 'AdminLTE-3.0.5/dist/js/adminlte.min.js' %}"></script>
 <script type="text/javascript">
+//active付与
+filename = window.location.href.split('/')[4];
+if(filename=="" || filename.match(/error|success/)){
+  filename = 'searchtweet';
+}
+console.log(filename)
+var activeElement = document.getElementById(filename);
+activeElement.classList.add('active');
 
-    $(document).ready(function () {
-    bsCustomFileInput.init();
-    });
+if(document.getElementById('learntweet_base').getElementsByClassName('active') != null){
+  console.log(document.getElementById('learntweet').classList.add('active'))
+}
 </script>
 </body>
 </html>

@@ -3,6 +3,9 @@ from ..models import TemporaryData
 from django.views.generic.edit import FormView
 from ..forms import IndexForm
 
+from datetime import datetime as dt
+from pytz import timezone
+
 
 class SearchTweet(FormView):
     template_name = 'index.html'
@@ -11,15 +14,28 @@ class SearchTweet(FormView):
 
 
     def form_valid(self, form):
-        print('-----------in form valid of SearchTweet------------')
-        TemporaryData.objects.all().delete()
-        searh_word = self.request.POST['search']
-        tweets = tweet_get(searh_word)
-        for tweet in tweets:
-            temp_data = TemporaryData.objects.create(temp_tweet_id=tweet[1], temp_text=tweet[0])
+        try:
+            print('-----------in form valid of SearchTweet------------')
+            TemporaryData.objects.all().delete()
+            searh_word = self.request.POST['search']
+            tweets = tweet_get(searh_word)
+            for tweet in tweets:
+                temp_time = dt.strptime(tweet[3], '%a %b %d %X %z %Y').astimezone(timezone('Asia/Tokyo'))
+                time = temp_time.strftime('%Y年%m月%d日 %H時%M分')
 
-        return super().form_valid(form)
+                temp_data = TemporaryData.objects.create(
+                    temp_tweet_id=tweet[1], 
+                    temp_text=tweet[0], 
+                    temp_location=tweet[2], 
+                    temp_created_at=time,
+                    search_word=searh_word)
+
+            return super().form_valid(form)
+
+        except TypeError:
+            return super().form_invalid(form)
     
     def form_invalid(self, form):
-        print('aaaaaaa')
         return super().form_invalid(form)
+
+        

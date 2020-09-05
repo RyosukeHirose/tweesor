@@ -32,9 +32,12 @@ def tweet_get(searh_word):
         responses = requests.get(API_URL, headers=headers, params=params)
         tweet_list = []
         for tweet in responses.json()['statuses']:
+
             full_text = tweet['full_text']
             id = tweet['id']
-            tweet_list.append((full_text, id))
+            created_at = tweet['created_at']
+            location = tweet['user']['location']
+            tweet_list.append((full_text, id, location, created_at, searh_word))
         return tweet_list
     except Exception as e:
         print(e)

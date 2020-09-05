@@ -28,6 +28,9 @@ class LearnTweet(models.Model):
 class TemporaryData(models.Model):
     temp_tweet_id = models.IntegerField()
     temp_text = models.TextField()
+    temp_created_at = models.TextField(default='')
+    temp_location = models.TextField(default='')
+    search_word = models.TextField(default='')
 
     def __str__(self):
         return self.temp_text

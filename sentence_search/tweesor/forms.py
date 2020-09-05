@@ -2,7 +2,9 @@ from django import forms
 from .models import Label
 
 class IndexForm(forms.ModelForm):   
-    create_label = forms.CharField(label='種別',required=False)
+    create_label = forms.CharField(label='種別',
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'form-control','placeholder':'新規登録する種別を登録してください'}))
 
     labels = forms.ModelChoiceField(Label.objects, label='種別',
                                      empty_label='種別を選択してください',

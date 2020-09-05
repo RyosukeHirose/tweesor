@@ -1,10 +1,107 @@
 {% extends 'base.html' %}
 {% block content %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h2 class="m-0 text-dark">{{learn_tweets.0.label}}学習ツイート一覧</h2>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Starter Page</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    {% if error_message %}
+        <p class="alert alert-danger alert-dismissible"><i class="icon fas fa-ban"></i>{{ error_message }}</p>
+    {% elif post_message %}
+        <p class="alert alert-success alert-dismissible"><i class="icon fas fa-check"></i>{{ post_message }}</p>
+    {% endif %}
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-10">
+            {% if learn_tweets %}  
+　　　　　　　{% for learn_tweet in learn_tweets %}
+            <div class="card card-primary card-outline">
+                <div class="card-body">
+                　　<p>{{ learn_tweet.text }}</p>
+                </div>
+                <form action="{% url 'tweesor:delete_tweet' label_id learn_tweet.tweet_id %}" method="post">
+                {% csrf_token %}
+                  <div class="field card-footer">
+                      <input class="btn btn-info" type="submit" name="learn" value="削除"　id="learn">            
+                  </div>
+                </form>
+            </div><!-- /.card -->
+            {% endfor %}
+            {% else %}
+                <p>ツイートを学習させてください</p>
+            {% endif %}
+            </div>
 
-{% for learn_tweet in learn_tweets %}
-<div>
-    <p>{{ learn_tweet.text }}</p>
-</div>
-{% endfor %}
+          </div>
+          <!-- /.col-md-6 -->
+          <div class="col-lg-2">
+          </div>
+          <!-- ページネーション -->
+          <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center pagination-lg g-mt-28 g-mb-28">
+                  <!-- 前へ の部分 -->
+                  {% if page_obj.has_previous %}
+                      <li class="page-item">
+                          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                      </li>
+                  {% endif %}
+          
+                  <!-- 数字の部分 -->
+                  {% for num in page_obj.paginator.page_range %}
+                      {% if num <= page_obj.number|add:5 and num >= page_obj.number|add:-5 %}
+          
+                          {% if page_obj.number == num %}
+                              <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                          {% else %}
+                              <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                          {% endif %}
+                      {% endif %}
+                  {% endfor %}
+          
+                  <!-- 次へ の部分 -->
+                  {% if page_obj.has_next %}
+                      <li class="page-item">
+                          <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                              <span aria-hidden="true">&raquo;</span>
+                          </a>
+                      </li>
+                  {% endif %}
+              </ul>
+          </nav>
+          <div class="col-lg-12">
+          </div>
+          <div class="col-lg-6">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p{% if message.tags %} class="{{ message.tags }} alert alert-danger alert-dismissible"{% endif %}><i class="icon fas fa-ban"></i>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+          <!-- /.col-md-6 -->
+      </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+    <!-- /.content -->
+
+
 
 {% endblock %}

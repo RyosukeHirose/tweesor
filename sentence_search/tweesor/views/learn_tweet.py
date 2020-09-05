@@ -15,3 +15,16 @@ class LearnedTweet(ListView):
 
 
         return learned_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print('----------in Index get_context_data----------')
+        context['label_id'] = self.kwargs['label_id']
+        if 'post_message' in self.kwargs:
+            message = 'error_message' if 'error' in  self.kwargs['post_message'] else 'post_message'
+            context[message] = self.kwargs['post_message']
+
+            return context       
+        else:
+            return context
+
