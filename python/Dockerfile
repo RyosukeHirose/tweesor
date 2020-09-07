@@ -18,7 +18,6 @@ RUN apt-get update \
 && pip3 install twitter \
 && pip install requests-oauthlib
 
-
 # ディレクトリでgit clone https://github.com/facebookresearch/fastText.gitを実行しておく
 # make
 # python manage.py runserver 0:8000

@@ -2,17 +2,31 @@ version: '3.7'
 services:  
   python: 
     build:
-      context: .
+      context: ./python
     volumes:
         - ~/.ssh/id_rsa:/home/user/.ssh/id_rsa
         - ./:/code/
     container_name: tweesor_python
+    command: uwsgi --ini /code/python/uwsgi.ini
     env_file:
         - .env
     ports:
+      - 3031:3031
       - 9000:9000
     tty: true
     stdin_open: true
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./sentence_search/static:/static
+    links:
+      - python
+    ports:
+      - "4231:80"
+    environment:
+      TZ: "Asia/Tokyo"
 
 
 
