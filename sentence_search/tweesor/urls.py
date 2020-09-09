@@ -4,7 +4,7 @@ app_name = 'tweesor'
 
 urlpatterns = [
     
-    path('learn/<int:tweet_id>/', views.items.learn_tweet, name='learn'),
+    # path('learn/<int:tweet_id>/', views.items.learn_tweet, name='learn'),
     path('search_tweet/', views.search_tweet.SearchTweet.as_view(), name='search_tweet'),
     path('', views.index.Index.as_view(), name='index'),
     path('<str:post_message>', views.index.Index.as_view(), name='index'),

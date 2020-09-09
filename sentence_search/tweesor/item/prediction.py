@@ -5,7 +5,7 @@ import MeCab
 class predict:
     def __init__(self):
     # モデル読み込み
-    self.classifier = ft.load_model('../../model.bin')
+        self.classifier = ft.load_model('../../model.bin')
 
     def get_surfaces(self, content):
         """

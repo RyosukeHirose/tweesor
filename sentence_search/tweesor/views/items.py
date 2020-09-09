@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect, HttpResponse
 
-from ..item.text_changer import get_words_by_mecab
+# from ..item.text_changer import get_words_by_mecab
 from ..item.write_text import write_txt
 from ..models import LearnTweet, TemporaryData, Label
 from ..forms import IndexForm
@@ -11,38 +11,38 @@ from django.urls import reverse
 import urllib
 import csv
 
-def learn_tweet(request, tweet_id):
-    """
-    ツイートを記憶させるメソッド
-    """
-    if request.method == 'POST':
+# def learn_tweet(request, tweet_id):
+#     """
+#     ツイートを記憶させるメソッド
+#     """
+#     if request.method == 'POST':
         
-        print('----------in learn_tweet----------')
-        try:
-            label = Label.objects.filter(label_mark=request.POST['labels'])
+#         print('----------in learn_tweet----------')
+#         try:
+#             label = Label.objects.filter(label_mark=request.POST['labels'])
 
-            # 一時保存から該当データを取得して整形
-            target = TemporaryData.objects.filter(temp_tweet_id=tweet_id)
-            target_word_list = get_words_by_mecab(target[0].temp_text)
-            # fasttextに使うツイートを保存
-            learn_tweet = LearnTweet.objects.update_or_create(
-                tweet_id=tweet_id,
-                text=target[0].temp_text,
-                text_list=target_word_list,
-                label=label[0]
-            )
-            # textに書き込み
-            write_txt(target_word_list, request.POST['labels'])
+#             # 一時保存から該当データを取得して整形
+#             target = TemporaryData.objects.filter(temp_tweet_id=tweet_id)
+#             target_word_list = get_words_by_mecab(target[0].temp_text)
+#             # fasttextに使うツイートを保存
+#             learn_tweet = LearnTweet.objects.update_or_create(
+#                 tweet_id=tweet_id,
+#                 text=target[0].temp_text,
+#                 text_list=target_word_list,
+#                 label=label[0]
+#             )
+#             # textに書き込み
+#             write_txt(target_word_list, request.POST['labels'])
 
-        except (KeyError, Label.DoesNotExist):
-            # Redisplay the question voting form.
-            return HttpResponseRedirect(reverse('tweesor:index', kwargs={'error_message': 'error 予期せぬエラーが発生しました'}))
+#         except (KeyError, Label.DoesNotExist):
+#             # Redisplay the question voting form.
+#             return HttpResponseRedirect(reverse('tweesor:index', kwargs={'error_message': 'error 予期せぬエラーが発生しました'}))
             
-        except IndexError:
-            return HttpResponseRedirect(reverse('tweesor:index', kwargs={'error_message': 'error 種別を選択してください'}))
-        else:
+#         except IndexError:
+#             return HttpResponseRedirect(reverse('tweesor:index', kwargs={'error_message': 'error 種別を選択してください'}))
+#         else:
 
-            return HttpResponseRedirect(reverse('tweesor:index', kwargs={'post_message': 'success ツイートを学習しました'}))
+#             return HttpResponseRedirect(reverse('tweesor:index', kwargs={'post_message': 'success ツイートを学習しました'}))
 
 def delete_tweet(request, label_id, tweet_id):
     if request.method == 'POST':
