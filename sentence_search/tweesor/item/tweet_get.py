@@ -26,7 +26,7 @@ def tweet_get(searh_word):
             'Authorization': 'Bearer {}'.format(BA),
         }
         params = (
-            ('q', KEYWORD),
+            ('q', "{} -filter:retweets".format(KEYWORD)),
             ('count', '100'),
         )
         responses = requests.get(API_URL, headers=headers, params=params)

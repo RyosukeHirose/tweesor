@@ -23,4 +23,4 @@ RUN apt-get update \
 
 # ディレクトリでgit clone https://github.com/facebookresearch/fastText.gitを実行しておく
 # make
-# python manage.py runserver 0:8000
+# python manage.py runserver 0:9000
