@@ -2,6 +2,7 @@ from ..item.tweet_get import tweet_get
 from ..models import TemporaryData
 from django.views.generic.edit import FormView
 from ..forms import IndexForm
+from ..item.text_changer import get_words_by_mecab
 
 from datetime import datetime as dt
 from pytz import timezone
@@ -19,10 +20,10 @@ class SearchTweet(FormView):
             TemporaryData.objects.all().delete()
             searh_word = self.request.POST['search']
             tweets = tweet_get(searh_word)
+            
             for tweet in tweets:
                 temp_time = dt.strptime(tweet[3], '%a %b %d %X %z %Y').astimezone(timezone('Asia/Tokyo'))
                 time = temp_time.strftime('%Y年%m月%d日 %H時%M分')
-
                 temp_data = TemporaryData.objects.create(
                     temp_tweet_id=tweet[1], 
                     temp_text=tweet[0], 
