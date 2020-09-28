@@ -41,7 +41,7 @@ class Index(ListView, ModelFormMixin):
             
         
         words_count = Counter(wakachi_text_list)
-        sorted_words_count = dict(sorted(words_count.items(), key=lambda x:x[1], reverse=True))
+        sorted_words_count = dict(sorted(words_count.items(), key=lambda x:x[1], reverse=True)[:10])
         print("---------{}--".format(sorted_words_count))
         context['words_counts'] = sorted_words_count
         if 'post_message' in self.kwargs:
