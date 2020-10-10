@@ -9,9 +9,11 @@ class Label(models.Model):
         return self.label_name
 
 class LearnTweet(models.Model):
-    tweet_id = models.IntegerField()
-    text = models.TextField()
-    text_list = models.TextField()
+    tweet_id = models.IntegerField(default='')
+    text = models.TextField(default='')
+    text_list = models.TextField(default='')
+    created_at = models.TextField(default='')
+    location = models.TextField(default='')
     label = models.ForeignKey(
         Label,
         default = '',
@@ -21,7 +23,7 @@ class LearnTweet(models.Model):
 
 
     def __str__(self):
-        return str(self.tweet_id)
+        return str(self.text)
 
 
 

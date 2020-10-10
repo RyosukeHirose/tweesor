@@ -1,5 +1,5 @@
 from ..item.tweet_get import tweet_get
-from ..models import TemporaryData
+from ..models import TemporaryData, LearnTweet, Label
 from django.views.generic.edit import FormView
 from ..forms import IndexForm
 from ..item.text_changer import get_words_by_mecab
@@ -16,11 +16,14 @@ class SearchTweet(FormView):
 
     def form_valid(self, form):
         try:
-            print('-----------in form valid of SearchTweet------------')
+            # 前回の検索ツイートを初期化
             TemporaryData.objects.all().delete()
             searh_word = self.request.POST['search']
             tweets = tweet_get(searh_word)
-            
+
+            # すでに登録されているツイートを取得
+            learn_tweets = LearnTweet.objects.all()
+
             for tweet in tweets:
                 temp_time = dt.strptime(tweet[3], '%a %b %d %X %z %Y').astimezone(timezone('Asia/Tokyo'))
                 time = temp_time.strftime('%Y年%m月%d日 %H時%M分')
@@ -30,6 +33,17 @@ class SearchTweet(FormView):
                     temp_location=tweet[2], 
                     temp_created_at=time,
                     search_word=searh_word)
+                
+                label=Label.objects.update_or_create(
+                    label_name=searh_word)
+
+                learn_data=LearnTweet.objects.update_or_create(
+                    tweet_id=tweet[1],
+                    text=tweet[0],
+                    created_at=time,
+                    label=Label.objects.filter(label_name=searh_word)[0])
+
+            
 
             return super().form_valid(form)
 

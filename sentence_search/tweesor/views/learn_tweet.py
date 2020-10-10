@@ -6,7 +6,7 @@ class LearnedTweet(ListView):
 
     template_name = 'learn_tweet.html'
     context_object_name = 'learn_tweets'
-    paginate_by = 20
+    paginate_by = 100
 
     def get_queryset(self):
         label_id = self.kwargs['label_id']

@@ -24,7 +24,7 @@ def get_words_by_mecab(text):
         word_kind = node.feature.split(",")[0]
         if word_kind in ["名詞", "動詞", "形容詞", '形容動詞']:
             # 原型を取得
-            print(node.feature)
+            # print(node.feature)
             origin = node.feature.split(",")[6]
             # 名詞の場合原型がないので、フォロー
             if origin == "*":
