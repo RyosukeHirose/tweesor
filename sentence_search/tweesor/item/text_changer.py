@@ -17,20 +17,28 @@ def get_words_by_mecab(text):
     単語毎のlistで変換
     """
     text = format_text(text)
+    print(text)
     node = m.parseToNode(text)
+    hukugou = "" #複合名詞
     words = []
-
     while node:        
         word_kind = node.feature.split(",")[0]
-        if word_kind in ["名詞", "動詞", "形容詞", '形容動詞']:
-            # 原型を取得
-            # print(node.feature)
-            origin = node.feature.split(",")[6]
-            # 名詞の場合原型がないので、フォロー
-            if origin == "*":
-                words.append(node.surface)
-            else:
+        # 原型を取得
+        origin = node.feature.split(",")[6]
+        # 原型がない場合をフォロー
+        if origin == "*":
+            origin = node.surface
+
+        # 名詞の場合、複合名詞であるかのチェックのため、一旦変数に格納
+        if word_kind == "名詞":
+            hukugou = hukugou + origin
+
+        else:
+            words.append(hukugou)
+            hukugou = ""
+            if word_kind in ["動詞", "形容詞", '形容動詞']:
                 words.append(origin)
+
         node = node.next
     
     # スペース区切りの文字列（わかち書き）で返す
@@ -52,4 +60,7 @@ def format_text(text):
     text=re.sub('#', " ", text)
     text=re.sub('\)', " ", text)
     text=re.sub('\(', " ", text)
+    text=re.sub('する', " ", text)
+    text=re.sub('いる', " ", text)
+    text=re.sub('なる', " ", text)
     return text

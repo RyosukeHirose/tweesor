@@ -7,9 +7,10 @@ from ..forms import IndexForm
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect, render
 from django.urls import reverse
-
+from ..item.text_changer import get_words_by_mecab
 import urllib
 import csv
+from collections import Counter
 
 # def learn_tweet(request, tweet_id):
 #     """
@@ -58,15 +59,51 @@ def delete_tweet(request, label_id, tweet_id):
 
             return HttpResponseRedirect(reverse('tweesor:learn_tweet', kwargs={'label_id':label_id, 'post_message': 'success　学習したツイートを削除しました'}))
 
-def post_export(request):
+def post_export(request, search_word):
+    """
+    役職テーブルを全件検索して、CSVファイルを作成してresponseに出力します。
+    """
+    if search_word == "temp":
+        response = HttpResponse(content_type='text/csv; charset=UTF-8')
+        filename = urllib.parse.quote((u'{}.csv'.format(TemporaryData.objects.all()[0].search_word)).encode("utf8"))
+        response['Content-Disposition'] = 'attachment; filename*=UTF-8\'\'{}'.format(filename)
+        writer = csv.writer(response)
+        writer.writerow(['検索語句', '時間', '本文'])
+        for data in TemporaryData.objects.all():
+            writer.writerow([data.search_word, data.temp_created_at, data.temp_text])
+    else:
+        response = HttpResponse(content_type='text/csv; charset=UTF-8')
+        filename = urllib.parse.quote((u'full_list_of_{}.csv'.format(LearnTweet.objects.all()[0].label)).encode("utf8"))
+        response['Content-Disposition'] = 'attachment; filename*=UTF-8\'\'{}'.format(filename)
+        writer = csv.writer(response)
+        writer.writerow(['検索語句', '時間', '本文'])
+        for data in LearnTweet.objects.all():
+            writer.writerow([data.label, data.created_at, data.text])
+    return response
+
+def word_export(self, search_word):
     """
     役職テーブルを全件検索して、CSVファイルを作成してresponseに出力します。
     """
     response = HttpResponse(content_type='text/csv; charset=UTF-8')
-    filename = urllib.parse.quote((u'{}.csv'.format(TemporaryData.objects.all()[0].search_word)).encode("utf8"))
+    if search_word == "temp":
+        filename = urllib.parse.quote((u'word_of_{}.csv'.format(TemporaryData.objects.all()[0].search_word)).encode("utf8"))
+    else:
+        filename = urllib.parse.quote((u'word_of_{}.csv'.format(LearnTweet.objects.all()[0].label)).encode("utf8"))
     response['Content-Disposition'] = 'attachment; filename*=UTF-8\'\'{}'.format(filename)
     writer = csv.writer(response)
-    writer.writerow(['検索語句', '時間', 'location', '本文'])
-    for data in TemporaryData.objects.all():
-        writer.writerow([data.search_word, data.temp_created_at, data.temp_location, data.temp_text])
+    writer.writerow(['単語', '数'])
+    wakachi_text_list = []
+    if search_word == "temp":
+        for data in TemporaryData.objects.all():
+            wakachi_text_list = wakachi_text_list + get_words_by_mecab(data.temp_text).split()
+    else:
+        for data in LearnTweet.objects.all():
+            wakachi_text_list = wakachi_text_list + get_words_by_mecab(data.text).split()
+    words_count = Counter(wakachi_text_list)
+    sorted_words_counts = dict(sorted(words_count.items(), key=lambda x:x[1], reverse=True))
+    print(sorted_words_counts)
+    for sorted_words_count in sorted_words_counts:
+        
+        writer.writerow([sorted_words_count, sorted_words_counts[sorted_words_count]])
     return response

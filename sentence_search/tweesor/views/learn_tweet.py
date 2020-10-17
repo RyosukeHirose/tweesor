@@ -18,8 +18,11 @@ class LearnedTweet(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print('----------in Index get_context_data----------')
+        learned_list = LearnTweet.objects.filter(label=self.kwargs['label_id'])
+        total_number = len(learned_list)
+
         context['label_id'] = self.kwargs['label_id']
+        context['total_number'] = total_number
         if 'post_message' in self.kwargs:
             message = 'error_message' if 'error' in  self.kwargs['post_message'] else 'post_message'
             context[message] = self.kwargs['post_message']

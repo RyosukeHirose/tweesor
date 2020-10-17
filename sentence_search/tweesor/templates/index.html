@@ -45,16 +45,19 @@
             </div>
           </div>
           <div class="col-lg-6">
-          {% for word,count in words_counts.items %}
-            <p>{{word}}:{{count}}</p>
-          {% endfor %}
+                <form action="{% url 'tweesor:temp_word_list'%}" method="get">
+                {% csrf_token %}
+                  <div class="field card-footer">
+                      <input class="btn btn-info" type="submit" name="temp_word_list" value="単語リストへ"　id="temp_word_list">            
+                  </div>
+                </form>
           </div>
         </div>
         
           {% if tweets %}
           <div class="row">
           　　<p class="col-lg-2">検索ワード：{{ tweets.0.search_word }}</p>
-          　　<a href="{% url 'tweesor:export' %}" class="col-lg-1">エクスポート</a>
+          　　<a href="{% url 'tweesor:export' "temp"%}" class="col-lg-1">エクスポート</a>
           </div>
           {% endif %}
           <div class="col-lg-10">
