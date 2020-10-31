@@ -10,8 +10,9 @@ class LearnedTweet(ListView):
 
     def get_queryset(self):
         label_id = self.kwargs['label_id']
-        learned_list = LearnTweet.objects.filter(label=label_id)
-        print(learned_list)
+        learned_list = LearnTweet.objects.filter(label=label_id).order_by('-created_at')
+        print(type(learned_list))
+
 
 
         return learned_list

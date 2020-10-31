@@ -73,11 +73,12 @@ def post_export(request, search_word):
             writer.writerow([data.search_word, data.temp_created_at, data.temp_text])
     else:
         response = HttpResponse(content_type='text/csv; charset=UTF-8')
-        filename = urllib.parse.quote((u'full_list_of_{}.csv'.format(LearnTweet.objects.all()[0].label)).encode("utf8"))
+        filename = urllib.parse.quote((u'full_list_of_{}.csv').format(search_word).encode("utf8"))
         response['Content-Disposition'] = 'attachment; filename*=UTF-8\'\'{}'.format(filename)
+        tweets = Label.objects.get(label_name=search_word).tweets.all()
         writer = csv.writer(response)
         writer.writerow(['検索語句', '時間', '本文'])
-        for data in LearnTweet.objects.all():
+        for data in tweets:
             writer.writerow([data.label, data.created_at, data.text])
     return response
 
@@ -89,7 +90,7 @@ def word_export(self, search_word):
     if search_word == "temp":
         filename = urllib.parse.quote((u'word_of_{}.csv'.format(TemporaryData.objects.all()[0].search_word)).encode("utf8"))
     else:
-        filename = urllib.parse.quote((u'word_of_{}.csv'.format(LearnTweet.objects.all()[0].label)).encode("utf8"))
+        filename = urllib.parse.quote((u'word_of_{}.csv').format(search_word).encode("utf8"))
     response['Content-Disposition'] = 'attachment; filename*=UTF-8\'\'{}'.format(filename)
     writer = csv.writer(response)
     writer.writerow(['単語', '数'])
@@ -98,7 +99,7 @@ def word_export(self, search_word):
         for data in TemporaryData.objects.all():
             wakachi_text_list = wakachi_text_list + get_words_by_mecab(data.temp_text).split()
     else:
-        for data in LearnTweet.objects.all():
+        for data in Label.objects.get(label_name=search_word).tweets.all():
             wakachi_text_list = wakachi_text_list + get_words_by_mecab(data.text).split()
     words_count = Counter(wakachi_text_list)
     sorted_words_counts = dict(sorted(words_count.items(), key=lambda x:x[1], reverse=True))
