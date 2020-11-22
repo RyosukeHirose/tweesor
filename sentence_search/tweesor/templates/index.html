@@ -71,7 +71,7 @@
               {% for tweet in tweets %}
               <div class="card card-primary card-outline">
                 <div>
-                 <p>time:{{ tweet.temp_created_at }}</p>
+                 <p>time:{{ tweet.temp_created_at }}　いいね:{{ tweet.temp_iine }} リツイート:{{ tweet.temp_retweet }}</p>
                 </div>
                 <div class="card-body">
                       <p>{{ tweet.temp_text }}</p>

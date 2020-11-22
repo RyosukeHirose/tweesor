@@ -12,7 +12,7 @@ class Index(ListView, ModelFormMixin):
     context_object_name = 'tweets'
     success_url = "/"
     form_class = IndexForm
-    paginate_by = 10
+    paginate_by = 100
 
 
     def get(self, request, *args, **kwargs):

@@ -17,7 +17,6 @@ def get_words_by_mecab(text):
     単語毎のlistで変換
     """
     text = format_text(text)
-    print(text)
     node = m.parseToNode(text)
     hukugou = "" #複合名詞
     words = []

@@ -20,7 +20,6 @@ class SearchTweet(FormView):
             TemporaryData.objects.all().delete()
             searh_word = self.request.POST['search']
             tweets = tweet_get(searh_word)
-
             # すでに登録されているツイートを取得
             learn_tweets = LearnTweet.objects.all()
 
@@ -31,6 +30,8 @@ class SearchTweet(FormView):
                     temp_tweet_id=tweet[1], 
                     temp_text=tweet[0], 
                     temp_location=tweet[2], 
+                    temp_iine = tweet[5],
+                    temp_retweet = tweet[6],
                     temp_created_at=time,
                     search_word=searh_word)
                 
@@ -40,6 +41,8 @@ class SearchTweet(FormView):
                 learn_data=LearnTweet.objects.update_or_create(
                     tweet_id=tweet[1],
                     text=tweet[0],
+                    iine_count=tweet[5],
+                    retweet_count=tweet[6],
                     created_at=time,
                     label=Label.objects.filter(label_name=searh_word)[0])
 

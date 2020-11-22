@@ -25,19 +25,27 @@ def tweet_get(searh_word):
         headers = {
             'Authorization': 'Bearer {}'.format(BA),
         }
-        params = (
-            ('q', "{} -filter:retweets".format(KEYWORD)),
-            ('count', '100'),
-        )
-        responses = requests.get(API_URL, headers=headers, params=params)
-        tweet_list = []
-        for tweet in responses.json()['statuses']:
 
-            full_text = tweet['full_text']
-            id = tweet['id']
-            created_at = tweet['created_at']
-            location = tweet['user']['location']
-            tweet_list.append((full_text, id, location, created_at, searh_word))
+        params = {
+            "q": "{} -filter:retweets".format(KEYWORD), 
+            "count": 100
+        }
+        
+        tweet_list = []
+        for i in range(10):
+            responses = requests.get(API_URL, headers=headers, params=params)
+            for tweet in responses.json()['statuses']:
+
+                full_text = tweet['full_text']
+                id = tweet['id']
+                created_at = tweet['created_at']
+                location = tweet['user']['location']
+                iine_count = tweet['favorite_count']
+                retweet_count = tweet['retweet_count']
+                tweet_list.append((full_text, id, location, created_at, searh_word, iine_count, retweet_count))
+                max_id = int(tweet["id"]) - 1
+                params["max_id"] = max_id
+
         return tweet_list
     except Exception as e:
         print(e)

@@ -14,6 +14,8 @@ class LearnTweet(models.Model):
     text_list = models.TextField(default='')
     created_at = models.TextField(default='')
     location = models.TextField(default='')
+    iine_count = models.IntegerField(blank=True, null=True)
+    retweet_count = models.IntegerField(blank=True, null=True)
     label = models.ForeignKey(
         Label,
         default = '',
@@ -33,6 +35,8 @@ class TemporaryData(models.Model):
     temp_created_at = models.TextField(default='')
     temp_location = models.TextField(default='')
     search_word = models.TextField(default='')
+    temp_iine = models.IntegerField(blank=True, null=True)
+    temp_retweet = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.temp_text
