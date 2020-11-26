@@ -40,7 +40,7 @@
 　　　　　　　{% for learn_tweet in learn_tweets %}
             <div class="card card-primary card-outline">
                 <div class="card-body">
-                   <p>{{ learn_tweet.created_at }}</p>
+                   <p>{{ learn_tweet.created_at }}　いいね:{{ learn_tweet.iine_count }} リツイート:{{ learn_tweet.retweet_count }}</p>
                 　　<p>{{ learn_tweet.text }}</p>
                 </div>
                 <form action="{% url 'tweesor:delete_tweet' label_id learn_tweet.tweet_id %}" method="post">
