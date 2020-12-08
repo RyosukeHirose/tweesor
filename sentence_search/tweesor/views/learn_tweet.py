@@ -11,7 +11,12 @@ class LearnedTweet(ListView):
     def get_queryset(self):
         label_id = self.kwargs['label_id']
         learned_list = LearnTweet.objects.filter(label=label_id).order_by('-created_at')
-        print(type(learned_list))
+        if 'order' in self.kwargs:
+            order = self.kwargs['order']
+            if order == 'iine':
+                learned_list = learned_list.order_by('-iine_count')
+
+
 
 
 

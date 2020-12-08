@@ -35,6 +35,11 @@ def tweet_get(searh_word):
         for i in range(10):
             responses = requests.get(API_URL, headers=headers, params=params)
             for tweet in responses.json()['statuses']:
+                print(tweet['user'])
+                print(tweet['user']['name'])
+                print(tweet['user']['followers_count'])
+                print(tweet['user']['friends_count'])
+                # print(tweet['user']['profile_location'])
 
                 full_text = tweet['full_text']
                 id = tweet['id']

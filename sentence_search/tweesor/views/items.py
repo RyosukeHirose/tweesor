@@ -68,18 +68,18 @@ def post_export(request, search_word):
         filename = urllib.parse.quote((u'{}.csv'.format(TemporaryData.objects.all()[0].search_word)).encode("utf8"))
         response['Content-Disposition'] = 'attachment; filename*=UTF-8\'\'{}'.format(filename)
         writer = csv.writer(response)
-        writer.writerow(['検索語句', '時間', '本文'])
+        writer.writerow(['検索語句', '時間', '本文','いいね','リツイート'])
         for data in TemporaryData.objects.all():
-            writer.writerow([data.search_word, data.temp_created_at, data.temp_text])
+            writer.writerow([data.search_word, data.temp_created_at, data.temp_text, data.temp_iine, data.temp_retweet])
     else:
         response = HttpResponse(content_type='text/csv; charset=UTF-8')
         filename = urllib.parse.quote((u'full_list_of_{}.csv').format(search_word).encode("utf8"))
         response['Content-Disposition'] = 'attachment; filename*=UTF-8\'\'{}'.format(filename)
         tweets = Label.objects.get(label_name=search_word).tweets.all()
         writer = csv.writer(response)
-        writer.writerow(['検索語句', '時間', '本文'])
+        writer.writerow(['検索語句', '時間', '本文','いいね','リツイート'])
         for data in tweets:
-            writer.writerow([data.label, data.created_at, data.text])
+            writer.writerow([data.label, data.created_at, data.text,data.iine_count, data.retweet_count])
     return response
 
 def word_export(self, search_word):

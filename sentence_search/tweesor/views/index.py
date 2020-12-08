@@ -34,6 +34,11 @@ class Index(ListView, ModelFormMixin):
         context = super().get_context_data(**kwargs)
         print('----------in Index get_context_data----------')
         tweets = TemporaryData.objects.all()
+        if 'order' in self.kwargs:
+            order = self.kwargs['order']
+            if order == 'iine':
+                tweets = tweets.order_by('-temp_iine')
+        
         wakachi_text_list = []
 
         for tweet in tweets:
@@ -44,6 +49,7 @@ class Index(ListView, ModelFormMixin):
         sorted_words_count = dict(sorted(words_count.items(), key=lambda x:x[1], reverse=True)[:10])
         # print("---------{}--".format(sorted_words_count))
         context['words_counts'] = sorted_words_count
+        context['tweets'] = tweets
         if 'post_message' in self.kwargs:
             message = 'error_message' if 'error' in  self.kwargs['post_message'] else 'post_message'
             context[message] = self.kwargs['post_message']
