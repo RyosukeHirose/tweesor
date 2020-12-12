@@ -33,7 +33,10 @@ class SearchTweet(FormView):
                     temp_iine = tweet[5],
                     temp_retweet = tweet[6],
                     temp_created_at=time,
-                    search_word=searh_word)
+                    search_word=searh_word,
+                    temp_user_name = tweet[7],
+                    temp_follow = tweet[8],
+                    temp_followers = tweet[9])
                 
                 label=Label.objects.update_or_create(
                     label_name=searh_word)
@@ -44,7 +47,11 @@ class SearchTweet(FormView):
                     iine_count=tweet[5],
                     retweet_count=tweet[6],
                     created_at=time,
-                    label=Label.objects.filter(label_name=searh_word)[0])
+                    label=Label.objects.filter(label_name=searh_word)[0],
+                    user_name = tweet[7],
+                    follow = tweet[8],
+                    followers = tweet[9]
+                    )
 
             
 

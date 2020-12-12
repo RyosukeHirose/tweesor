@@ -38,6 +38,10 @@ class Index(ListView, ModelFormMixin):
             order = self.kwargs['order']
             if order == 'iine':
                 tweets = tweets.order_by('-temp_iine')
+            elif order == 'follower':
+                print('order_tweet')
+                tweets = tweets.order_by('-temp_followers')
+                
         
         wakachi_text_list = []
 

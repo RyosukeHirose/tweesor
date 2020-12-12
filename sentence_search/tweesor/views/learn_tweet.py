@@ -15,6 +15,9 @@ class LearnedTweet(ListView):
             order = self.kwargs['order']
             if order == 'iine':
                 learned_list = learned_list.order_by('-iine_count')
+            elif order == 'follower':
+                learned_list = learned_list.order_by('-followers')
+                
 
 
 

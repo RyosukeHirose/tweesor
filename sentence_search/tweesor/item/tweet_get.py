@@ -35,11 +35,7 @@ def tweet_get(searh_word):
         for i in range(10):
             responses = requests.get(API_URL, headers=headers, params=params)
             for tweet in responses.json()['statuses']:
-                print(tweet['user'])
-                print(tweet['user']['name'])
-                print(tweet['user']['followers_count'])
-                print(tweet['user']['friends_count'])
-                # print(tweet['user']['profile_location'])
+
 
                 full_text = tweet['full_text']
                 id = tweet['id']
@@ -47,7 +43,12 @@ def tweet_get(searh_word):
                 location = tweet['user']['location']
                 iine_count = tweet['favorite_count']
                 retweet_count = tweet['retweet_count']
-                tweet_list.append((full_text, id, location, created_at, searh_word, iine_count, retweet_count))
+
+                user_name = tweet['user']['name']
+                follow = tweet['user']['friends_count']
+                followers = tweet['user']['followers_count']
+
+                tweet_list.append((full_text, id, location, created_at, searh_word, iine_count, retweet_count, user_name, follow, followers))
                 max_id = int(tweet["id"]) - 1
                 params["max_id"] = max_id
 

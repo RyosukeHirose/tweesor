@@ -58,7 +58,10 @@
           <div class="row">
           　　<p class="col-lg-2">検索ワード：{{ tweets.0.search_word }}</p>
           　　<a href="{% url 'tweesor:export' "temp"%}" class="col-lg-1">エクスポート</a>
-          <a href="{% url 'tweesor:iine_order' "iine"%}" class="col-lg-1">いいね降順に並び替え</a> </div>
+          <a href="{% url 'tweesor:iine_order' "iine"%}" class="col-lg-1">いいね降順に並び替え</a> 
+          <a href="{% url 'tweesor:follower_order' "follower"%}" class="col-lg-1">フォロワー降順に並び替え</a> 
+          </div>
+          
           {% endif %}
           <div class="col-lg-10">
             {% comment %} <h2>ツイートを指定の種別に学習させる</h2> {% endcomment %}
@@ -71,7 +74,7 @@
               {% for tweet in tweets %}
               <div class="card card-primary card-outline">
                 <div>
-                 <p>time:{{ tweet.temp_created_at }}　いいね:{{ tweet.temp_iine }} リツイート:{{ tweet.temp_retweet }}</p>
+                 <p>time:{{ tweet.temp_created_at }}　いいね:{{ tweet.temp_iine }} リツイート:{{ tweet.temp_retweet }}　ユーザーネーム:{{ tweet.temp_user_name }} フォロー数:{{ tweet.temp_follow }}　フォロワー数:{{ tweet.temp_followers }}</p>
                 </div>
                 <div class="card-body">
                       <p>{{ tweet.temp_text }}</p>
