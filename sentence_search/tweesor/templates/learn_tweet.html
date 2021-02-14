@@ -53,7 +53,7 @@
                 <div class="card-body">
                    <p>{{ learn_tweet.created_at }}　いいね:{{ learn_tweet.iine_count }} リツイート:{{ learn_tweet.retweet_count }} ユーザーネーム:{{ learn_tweet.user_name }} フォロー数:{{ learn_tweet.follow }}　フォロワー数:{{ learn_tweet.followers }}</p>
                 　　<p>{{ learn_tweet.text }}</p>
-                <p>ネガポジscore : {{score|floatformat:2}}</p>
+                <p>ネガポジscore : {{score}}</p>
                 </div>
                 <form action="{% url 'tweesor:delete_tweet' label_id learn_tweet.tweet_id %}" method="post">
                 {% csrf_token %}
