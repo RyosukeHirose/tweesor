@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load boost %}
 {% block content %}
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -6,16 +7,23 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h2 class="m-0 text-dark">検索語句：{{learn_tweets.0.label}}　取得履歴 {{ total_number }}個</h2>
-                <form action="{% url 'tweesor:word_list' label_id %}" method="get">
+                {% if scores %}
+                    <form action="{% url 'tweesor:word_list' label_id ver%}" method="get">
+                {% else %}
+                    <form action="{% url 'tweesor:word_list' label_id %}" method="get">
+                {% endif %}
+                
                 {% csrf_token %}
                   <div class="field card-footer">
                       <input class="btn btn-info" type="submit" name="learn" value="単語リストへ"　id="learn">            
                   </div>
                 </form>
                 <div class="row">
-                　　<a href="{% url 'tweesor:export' learn_tweets.0.label%}" class="col-lg-1">エクスポート</a>
-                    <a href="{% url 'tweesor:learn_iine_order' "iine" label_id%}" class="col-lg-1">いいね降順に並び替え</a> 
-                    <a href="{% url 'tweesor:learn_follower_order' "follower" label_id%}" class="col-lg-1">フォロワー降順に並び替え</a> 
+                　　<a href="{% url 'tweesor:export' learn_tweets.0.label%}" class="col-lg-2">エクスポート</a>
+                    <a href="{% url 'tweesor:learn_iine_order' "iine" label_id%}" class="col-lg-2">いいね降順に並び替え</a> 
+                    <a href="{% url 'tweesor:learn_follower_order' "follower" label_id%}" class="col-lg-2">フォロワー降順に並び替え</a>
+                    <a href="{% url 'tweesor:emotional_check' label_id "all"%}" class="col-lg-2">感情チェック</a> 
+                    <a href="{% url 'tweesor:emotional_check_neg' label_id "neg"%}" class="col-lg-2">感情チェック(ネガティブのみ表示)</a> 
 
                 </div>
           </div><!-- /.col -->
@@ -39,12 +47,13 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-10">
-            {% if learn_tweets %}  
-　　　　　　　{% for learn_tweet in learn_tweets %}
+            {% if learn_tweets and scores%} 
+            {% for learn_tweet, score in learn_tweets|zip:scores %}
             <div class="card card-primary card-outline">
                 <div class="card-body">
                    <p>{{ learn_tweet.created_at }}　いいね:{{ learn_tweet.iine_count }} リツイート:{{ learn_tweet.retweet_count }} ユーザーネーム:{{ learn_tweet.user_name }} フォロー数:{{ learn_tweet.follow }}　フォロワー数:{{ learn_tweet.followers }}</p>
                 　　<p>{{ learn_tweet.text }}</p>
+                <p>ネガポジscore : {{score}}</p>
                 </div>
                 <form action="{% url 'tweesor:delete_tweet' label_id learn_tweet.tweet_id %}" method="post">
                 {% csrf_token %}
@@ -53,6 +62,21 @@
                   </div>
                 </form>
             </div><!-- /.card -->
+            {% endfor %}
+            {% elif learn_tweets%}
+              {% for learn_tweet  in learn_tweets%}
+              <div class="card card-primary card-outline">
+                  <div class="card-body">
+                    <p>{{ learn_tweet.created_at }}　いいね:{{ learn_tweet.iine_count }} リツイート:{{ learn_tweet.retweet_count }} ユーザーネーム:{{ learn_tweet.user_name }} フォロー数:{{ learn_tweet.follow }}　フォロワー数:{{ learn_tweet.followers }}</p>
+                    <p>{{ learn_tweet.text }}</p>
+                  </div>
+                  <form action="{% url 'tweesor:delete_tweet' label_id learn_tweet.tweet_id %}" method="post">
+                  {% csrf_token %}
+                    <div class="field card-footer">
+                        <input class="btn btn-info" type="submit" name="delete" value="削除"　id="delete">            
+                    </div>
+                  </form>
+              </div><!-- /.card -->
             {% endfor %}
             {% else %}
                 <p>ツイートを学習させてください</p>
@@ -104,6 +128,7 @@
                 <div class="messages">
                     {% for message in messages %}
                         <p{% if message.tags %} class="{{ message.tags }} alert alert-danger alert-dismissible"{% endif %}><i class="icon fas fa-ban"></i>{{ message }}</p>
+                        <p>{{ learn_tweet.text }}</p>
                     {% endfor %}
                 </div>
             {% endif %}

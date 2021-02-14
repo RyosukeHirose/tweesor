@@ -20,7 +20,12 @@ class WordList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         label_id = self.kwargs['label_id']
-        learned_lists = LearnTweet.objects.filter(label=label_id)
+        
+        ver = self.kwargs['ver']
+        if ver == 'neg':
+            learned_lists = LearnTweet.objects.filter(label=label_id).filter(score__lt=0)
+        else:
+            learned_lists = LearnTweet.objects.filter(label=label_id)
 
         context['label_id'] = self.kwargs['label_id']
         wakachi_text_list = []
@@ -33,6 +38,8 @@ class WordList(ListView):
         sorted_words_count = dict(sorted(words_count.items(), key=lambda x:x[1], reverse=True))
         context['words_counts'] = sorted_words_count
         context['search_word'] = learned_lists[0].label
+        print(ver)
+        context['ver'] = ver
 
         return context       
 

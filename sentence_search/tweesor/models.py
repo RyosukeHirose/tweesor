@@ -26,6 +26,7 @@ class LearnTweet(models.Model):
         on_delete=models.CASCADE,
         related_name = "tweets"
         )
+    score = models.FloatField(blank=True, null=True)
 
 
     def __str__(self):

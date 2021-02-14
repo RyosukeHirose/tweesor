@@ -77,9 +77,9 @@ def post_export(request, search_word):
         response['Content-Disposition'] = 'attachment; filename*=UTF-8\'\'{}'.format(filename)
         tweets = Label.objects.get(label_name=search_word).tweets.all()
         writer = csv.writer(response)
-        writer.writerow(['検索語句', '時間', '本文','いいね','リツイート'])
+        writer.writerow(['検索語句', '時間', '本文','いいね','リツイート', 'ネガポジスコア'])
         for data in tweets:
-            writer.writerow([data.label, data.created_at, data.text,data.iine_count, data.retweet_count])
+            writer.writerow([data.label, data.created_at, data.text,data.iine_count, data.retweet_count, data.score])
     return response
 
 def word_export(self, search_word):

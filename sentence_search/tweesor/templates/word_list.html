@@ -1,6 +1,11 @@
 
 {% extends 'base.html' %}
+
 {% block content %}
+{% if ver == 'neg' %}
+
+<h1>ネガティブ文章の単語リスト</h1>
+{% endif %}
     <div class="row">
     　　<a href="{% url 'tweesor:word_export' search_word %}" class="col-lg-1">エクスポート</a>
     </div>

@@ -21,7 +21,10 @@ urlpatterns = [
     path('export/<str:search_word>/', views.items.post_export, name='export'),
     path('word_export/<str:search_word>/', views.items.word_export, name='word_export'),
     path('word_list/<int:label_id>', views.word_list.WordList.as_view(), name='word_list'),
+    path('word_list/<int:label_id>/<str:ver>', views.word_list.WordList.as_view(), name='word_list'),
     path('temp_word_list/', views.word_list.TempWordList.as_view(), name='temp_word_list'),
+    path('emotional_check/<int:label_id>/<str:ver>', views.emotional_check.EmotionalCheck.as_view(), name='emotional_check'),
+    path('emotional_check_neg/<int:label_id>/<str:ver>', views.emotional_check.EmotionalCheck.as_view(), name='emotional_check_neg'),
     # path('check_tweet', views.check_tweet.CheckTweet.as_view(), name='check_tweet'),
     # path('upload/', views.upload.Upload.as_view(), name='upload'),
 

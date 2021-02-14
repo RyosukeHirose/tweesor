@@ -28,11 +28,11 @@ def tweet_get(searh_word):
 
         params = {
             "q": "{} -filter:retweets".format(KEYWORD), 
-            "count": 100
+            "count": 500
         }
         
         tweet_list = []
-        for i in range(10):
+        for i in range(1):
             responses = requests.get(API_URL, headers=headers, params=params)
             for tweet in responses.json()['statuses']:
 
